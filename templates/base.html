@@ -6,5 +6,24 @@
 </head>
 <body>
 
+<form action="{% url 'addcat' %}" method="POST">{% csrf_token %}
+<table>
+    <tr><td>Category name:</td>
+        <td>
+            <select name="dropdownl">
+                {%for obj in catagoryryname %}
+                <option value="{{ obj.item }}">{{ obj.item }}</option>
+                {% endfor %}
+
+            </select>
+        </td>
+    <td><input type="submit" value="ADD" </td>
+    </tr>
+</table>
+
+
+
+</form>
+
 </body>
 </html>
