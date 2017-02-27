@@ -44,3 +44,16 @@ def euclidean_dist(prefs, user1, user2):
                           for item in prefs[user1] if item in prefs[user2]])
 
     return 1 / (1 + sqrt(sum_of_squares))
+
+def jacard(prefs, genre1, genre2):
+
+    genre1_movies = prefs[genre1].keys()
+    genre2_movies = prefs[genre2].keys()
+
+    p1_intersect_p2, p1_union_p2 = len(p1_intersect_p2), len(p1_union_p2)
+
+    if p1_intersect_p2 == 0: return 0
+
+
+
+
