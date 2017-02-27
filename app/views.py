@@ -3,6 +3,10 @@ from django.views.generic import FormView
 from app.models import menu
 from django.shortcuts import render
 from .forms import AddForm
+from math import sqrt
+
+
+
 
 # def import_sheet(request):
 #     if request.method == "POST":
@@ -25,3 +29,18 @@ def add(request):
         catagory.delete()
 
     return render(request, 'base.html', {'form':form, 'catagoryryname': catagoryryname})
+
+
+
+def euclidean_dist(prefs, user1, user2):
+    si = {}
+    for item in prefs[user1]:
+        if item in prefs[user2]: si[item] = 1
+
+    if len(si) == 0:
+        return 0
+
+    sum_of_squares = sum([pow(prefs[user1][item] - prefs[user2][item], 2)
+                          for item in prefs[user1] if item in prefs[user2]])
+
+    return 1 / (1 + sqrt(sum_of_squares))
