@@ -50,6 +50,10 @@ def jacard(prefs, genre1, genre2):
     genre1_movies = prefs[genre1].keys()
     genre2_movies = prefs[genre2].keys()
 
+    p1, p2 = set(genre1_movies), set(genre2_movies)
+    p1_intersect_p2 = p1.intersection(p2)
+    p1_union_p2 = p1.union(p2)
+
     p1_intersect_p2, p1_union_p2 = len(p1_intersect_p2), len(p1_union_p2)
 
     if p1_intersect_p2 == 0: return 0
