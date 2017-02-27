@@ -3,7 +3,7 @@ from app.models import menu
 
 
 class MenuAdmin(admin.ModelAdmin):
-    list_display = [ "item", "price"]
+    list_display = [ "item", "price", "rating", "user_rating"]
 
     class Meta:
         model = menu
