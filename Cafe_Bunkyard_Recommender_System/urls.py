@@ -1,8 +1,15 @@
-from django.conf.urls import url
+from django.conf.urls import url, include
 from django.contrib import admin
-from app.views import add
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^add/', add, name='addcat'),
+    url(r'^home/', include('app.urls')),
+
 ]
+
+
+
+
+
+
+
