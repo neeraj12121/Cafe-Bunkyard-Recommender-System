@@ -7,7 +7,7 @@ class UserProfile(models.Model):
     username = models.CharField(max_length=30 , default='')
     password = models.CharField(max_length=30 , default='')
 
-class menu(models.Model):
+class Menu(models.Model):
     item = models.CharField(max_length=120)
     price = models.IntegerField()
 
