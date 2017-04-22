@@ -1,36 +1,29 @@
 from django.http import HttpResponse, HttpResponseBadRequest
-from django.views.generic import FormView  
-from app.models import menu
-from django.shortcuts import render
+from django.views.generic import FormView
+from .models import UserProfile, Menu, Ratings, UserRating
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.shortcuts import render, redirect
+from django.db.models import Max
 from .forms import AddForm
 from math import sqrt
 
 
+def login(request):
+    if request.method=='POST':
+        username = request.POST['uname']
+        password = request.POST['psw']
+        user= UserProfile.objects.filter(username=username)
+        if user is not None:
+            print("exist")
+            request.session['uname']=user[0].username
+            request.session['userid']=user[0].userid
+            userdict={'username':username, 'userid':1}
+            print(userdict)
+            return redirect('reco')
+        else:
+            print("doesnot exist")
 
-
-# def import_sheet(request):
-#     if request.method == "POST":
-#         form = UploadFileForm(request.POST,request.FILES)
-#         if form.is_valid():
-#             request.FILES['file'].save_to_database(name_columns_by_row=2,model=Question,
-#                                                    mapdict=['question_text', 'pub_date', 'slug'])
-#             return HttpResponse("OK")
-#         else:
-#             return HttpResponseBadRequest()
-
-
-def add(request):
-    catagoryryname=menu.objects.all()
-    cname=request.POST.get('dropdownl')
-    if request.method == 'GET':
-        form = AddForm()
-    else:
-        catagory = menu.objects.get(cname=cname)
-        catagory.delete()
-
-    return render(request, 'base.html', {'form':form, 'catagoryryname': catagoryryname})
-
-
+    return render(request,"login.html")
 
 def euclidean_dist(prefs, user1, user2):
     si = {}
@@ -59,5 +52,30 @@ def jaccard(prefs, genre1, genre2):
     if p1_intersect_p2 == 0: return 0
 
 
+def register(request):
+    if request.method=='POST':
+        name = request.POST['uname']
+        passw = request.POST['psw']
+        passw_rpt = request.POST['psw_repeat']
+        print (name,passw,passw_rpt)
+        if passw==passw_rpt:
+            test = UserProfile.objects.filter(username=name)
+            if UserProfile.objects.all():
+                maxid = UserProfile.objects.all().aggregate(Max('userid'))
+            else:
+                maxid = Ratings.objects.all().aggregate(Max('userid'))
+            if test:
+                message = {'msg':"Already a user please try another username"}
+                print ("already a user")
+                return render(request,"register.html",message)
+            else:
+                print (maxid['userid__max'])
+                user = UserProfile(userid=maxid['userid__max']+1,username=name,password=passw)
+                user.save()
+                return redirect('login')
+        else:
+            message = {'msg':"One of the passwords does not match"}
+            return render(request,"register.html",message)
 
+    return render(request,"register.html")
 
