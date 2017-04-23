@@ -1,10 +1,6 @@
-from django.http import HttpResponse, HttpResponseBadRequest
-from django.views.generic import FormView
 from .models import UserProfile, Menu, Ratings, UserRating
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render, redirect
 from django.db.models import Max
-from .forms import AddForm
 from math import sqrt
 
 
@@ -50,6 +46,7 @@ def jaccard(prefs, genre1, genre2):
     p1_intersect_p2, p1_union_p2 = len(p1_intersect_p2), len(p1_union_p2)
 
     if p1_intersect_p2 == 0: return 0
+
 
 
 def register(request):

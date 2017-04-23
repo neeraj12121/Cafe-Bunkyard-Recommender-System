@@ -1,9 +1,9 @@
 from django import forms
 
-from .models import menu
+from .models import Menu
 
 class AddForm():
 
     class Meta:
-        model=menu
+        model=Menu
 
