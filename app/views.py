@@ -115,7 +115,12 @@ def jaccard(prefs, genre1, genre2):
 
     if p1_intersect_p2 == 0: return 0
 
+def pearson_default_recommendation(data, person):
+    return get_default_recommendations(data, person, similarity=pearson_correlation)
 
+
+def euclid_default_recommendation(data, person):
+    return get_default_recommendations(data, person, similarity=similarity_distance)
 
 def register(request):
     if request.method=='POST':
