@@ -149,3 +149,21 @@ def register(request):
 
     return render(request,"register.html")
 
+@csrf_exempt
+def profile(request, user_id):
+    if request.method == 'GET':
+        response = {}
+        message = 'no'
+        user = get_object_or_404(User, pk=user_id)
+        if user is not None:
+            message = 'ok'
+            list_of_services = []
+            services = Service.objects.filter(user=user)
+            for service in services:
+                serializer = ServiceSerializer(service)
+                list_of_services.append(serializer.data)
+
+            response['services'] = list_of_services
+
+        response['message'] = message
+        return JsonResponse(response)
