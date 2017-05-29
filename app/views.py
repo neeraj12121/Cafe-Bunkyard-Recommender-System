@@ -33,6 +33,74 @@ def euclidean_dist(prefs, user1, user2):
                           for item in prefs[user1] if item in prefs[user2]])
 
     return 1 / (1 + sqrt(sum_of_squares))
+def pearson_correlation(data, person1, person2):
+
+    shared_items = {}
+    for item in data[person1]:
+        if item in data[person2]:
+            shared_items[item] = 1
+
+    # number of elements
+    n = len(shared_items)
+
+    # no ratings in common
+    if n == 0:
+        return 0
+
+    n = float(n)
+
+    # adding up all preferences
+    sum1 = sum([data[person1][item] for item in shared_items])
+    sum2 = sum([data[person2][item] for item in shared_items])
+
+    # summing up squares
+    sum_sq1 = sum([pow(data[person1][item], 2) for item in shared_items])
+    sum_sq2 = sum([pow(data[person2][item], 2) for item in shared_items])
+
+    # summing products
+    p_sum = sum([data[person1][item] * data[person2][item] for item in shared_items])
+
+    # Pearson
+    num = p_sum - (sum1 * sum2 / n)
+    den = sqrt((sum_sq1 - pow(sum1, 2) / n) * (sum_sq2 - pow(sum2, 2) / n))
+
+    # avoid dividing by 0
+    if den == 0:
+        return 0
+
+    ret_val = num/den
+
+    return ret_val
+
+
+def get_default_recommendations(data, person, similarity):
+    totals = {}
+    similarity_sums = {}
+    for other in data:
+        # skip myself
+        if other == person:
+            continue
+
+        sim = similarity(data, person, other)
+        # ignore zero or negative correlations
+        if sim <= 0:
+            continue
+
+        for item in data[other]:
+            # score movies person hasn't seen yet
+            if item not in data[person] or data[person][item] == 0:
+                # similarity * score
+                totals.setdefault(item, 0)
+                totals[item] += data[other][item] * sim
+                # sum of similarities
+                similarity_sums.setdefault(item, 0)
+                similarity_sums[item] += sim
+
+        # normalised list
+        rankings = [(total / similarity_sums[item], item) for item, total in totals.items()]
+        rankings.sort()
+        rankings.reverse()
+        return rankings
 
 def jaccard(prefs, genre1, genre2):
 
