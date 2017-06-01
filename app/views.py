@@ -2,6 +2,12 @@ from .models import UserProfile, Menu, Ratings, UserRating
 from django.shortcuts import render, redirect
 from django.db.models import Max
 from math import sqrt
+from django.shortcuts import get_object_or_404
+from django.http import HttpResponse, JsonResponse
+from django.contrib.auth.models import User
+from .models import Service
+
+
 
 
 def login(request):
@@ -149,7 +155,6 @@ def register(request):
 
     return render(request,"register.html")
 
-@csrf_exempt
 def profile(request, user_id):
     if request.method == 'GET':
         response = {}
