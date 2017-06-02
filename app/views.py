@@ -5,10 +5,7 @@ from math import sqrt
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.models import User
-from .models import Service
-
-
-
+from app.models import Service
 
 def login(request):
     if request.method=='POST':
